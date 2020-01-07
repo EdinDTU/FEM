@@ -1,0 +1,15 @@
+%% Exercise 1.2
+close all; clc;
+
+%% a)
+
+% The exact solution 
+
+% Test case
+L = 2; c = 1; d = exp(2);
+x = [0.0, 0.2, 0.4, 0.6, 0.7, 0.9, 1.4, 1.5, 1.8, 1.9, 2.0];  
+
+[u] = BVP1D(L, c, d, x);
+
+plot(x,u)
+ax = 0:0.0001:2;
