@@ -18,6 +18,7 @@ EToV(:,2) = 2:size(EToV,1)+1;
 tol = 1e-4;
 
 c = 1;
+
 while true
     % Compute the error decrease of the split of all elements
     err = compute_error_decrease(func, VX, EToV);
@@ -35,6 +36,7 @@ while true
     [EToV, VX] = refine_marked(EToV, VX, idxMarked);
     c = c +1;
 end
+
 
 %% d)
 figure(1);
