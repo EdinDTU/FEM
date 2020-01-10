@@ -37,7 +37,7 @@ hold off
 % DOF = 69, Iterations = 9, tol=1e-4, Elements=
 
 %%
-plot(err, 'b.','MarkerSize',30)
+plot(err, 'b.','MarkerSize', 30)
 hold on
 plot([0 length(err)+2],[tol tol],'r--','LineWidth',3)
 hold off
