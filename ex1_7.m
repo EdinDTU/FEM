@@ -8,15 +8,84 @@ plot(x1, u(x1))
 
 
 %%
-u   = @(x) exp(-800.*(x - 0.4).^2) + 0.25.*exp(-40.*(x - 0.8).^2);
-u__ = @(x) (1004.0000 + 1600.00.*x.^2 - 2560.000.*x).*exp(-1.6.*(5.*x - 4.).^2) ...
-    + (408000.00 + 2.560000.*10.^6.*x.^2 - 2.0480000.*10.^6.*x).*exp(-32.*(5.*x - 2.).^2);
+clear, clc
+u = @(x) exp(-800*(x - 0.4).^2) + 0.25*exp(-40*(x - 0.8).^2);
 
-func = @(x) u__(x) - u(x);
+func = @(x) (1003.7500 + 1600.00*x.^2 - 2560.000*x)*exp(-1.6*(5.*x - 4.).^2) ...
+    + (407999.00 + 2.560000*10^6*x.^2 - 2.0480000*10.^6*x)*exp(-32.*(5.*x - 2.).^2);
+
+c = u(0);
+d = u(1);
+
+
+
+x = linspace(0,1,80);
+sol = BVP1_7D(1, c, d, x, func);
+
+x2 = linspace(0, 1, 1000);
+
+figure;
+plot(x, sol, 'r-', 'linewidth', 3, 'MarkerSize', 10)
+hold on
+grid on
+plot(x2, u(x2), 'b-', 'linewidth', 2)
+xlim([0 1.05])
+legend('Computed','Exact','Location','northwest')
+hold off
+
 
 %%
-c = func(0);
-d = func(1);
+xc = linspace(0,1,3);
 
-x = linspace(0,1,10);
-BVP1_7D(1, 0, 1, x, func)
+EToVc = zeros(length(xc)-1, 2);
+EToVc(:,1) = 1:size(EToVc,1);
+EToVc(:,2) = 2:size(EToVc,1)+1;
+
+tol = 1e-4;
+count = 1;
+while true
+    % Create a finner mesh
+    [EToVf, xf]  = refine_marked(EToVc, xc, EToVc(:,1));
+    
+    uhc = BVP1_7D(1, c, d, xc, func);
+    uhf = BVP1_7D(1, c, d, xf, func);
+    
+    err = compute_error_decrease2(xc, xf, uhc, uhf, EToVc, EToVf);
+    
+    idxMarked = EToVc(:,1);
+    idxMarked = idxMarked(err > tol);
+
+    % Check if convegence is reaced
+    if isempty(idxMarked)
+        disp('convergence reached')
+        break
+    end
+
+    % update EToVc, xc
+    [EToVc, xc]  = refine_marked(EToVc, xc, EToVc(:,1));
+    count = count +1;
+end
+
+
+%%
+
+x2 = linspace(0, 1, 1000);
+
+figure;
+plot(xc, uhc, 'r-', 'linewidth', 3, 'MarkerSize', 10)
+hold on
+grid on
+plot(x2, u(x2), 'b-', 'linewidth', 2)
+xlim([0 1.05])
+legend('Computed','Exact','Location','northwest')
+hold off
+%%
+plot(err, 'b.','MarkerSize', 30)
+hold on
+plot([0 length(err)+2],[tol tol],'r--','LineWidth',3)
+hold off
+ylim([1e-5 1.15e-4])
+xlim([0 length(err)+2])
+legend('Errors','Tolerance','FontSize',14)
+
+
