@@ -1,3 +1,5 @@
+%% A
+
 u = @(x) exp(-800*(x - 0.4).^2) + 0.25*exp(-40*(x - 0.8).^2);
 
 x1 = linspace(0,1,10000);
@@ -7,7 +9,7 @@ plot(x1, u(x1))
 % x = 0.4, 0.5, 0.8
 
 
-%%
+%%  initial mesh configuration
 clear, clc
 u = @(x) exp(-800*(x - 0.4).^2) + 0.25*exp(-40*(x - 0.8).^2);
 
@@ -18,8 +20,7 @@ c = u(0);
 d = u(1);
 
 
-
-x = linspace(0,1,80);
+x = linspace(0,1,3);
 sol = BVP1_7D(1, c, d, x, func);
 
 x2 = linspace(0, 1, 1000);
@@ -66,6 +67,7 @@ while true
     count = count +1;
 end
 
+% DOF = 2049, Iterations = 11, tol = 1e-4, Elements = 2048
 
 %%
 
@@ -84,8 +86,8 @@ plot(err, 'b.','MarkerSize', 30)
 hold on
 plot([0 length(err)+2],[tol tol],'r--','LineWidth',3)
 hold off
-ylim([1e-5 1.15e-4])
-xlim([0 length(err)+2])
+ylim([-1e-5 1.15e-4])
+xlim([0 length(err)])
 legend('Errors','Tolerance','FontSize',14)
 
 
