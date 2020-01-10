@@ -1,4 +1,4 @@
-function [u] = BVP1D(L,c,d,x)
+function [u] = BVP1D(L,c,d,x,plot1)
 % Purpose: Solve second-order boundary value problem using FEM.
 % Author(s): Edin Sadikovic, Mikkel Gronning, Ida Riis Jensen 
 
@@ -33,7 +33,7 @@ end
 % (Algorithm 2)
 
 b(1) = c;
-b(2) = - A(1,2)*c;
+b(2) = b(2)- A(1,2)*c;
 A(1,1) = 1;
 A(1,2) = 0;
 b(M) = d;
@@ -51,10 +51,12 @@ end
 
 %% OUTPUT
 % Visualize solution and output solution
-ax = 0:0.0001:2;
-plot(x,u,'r--X', 'linewidth', 3, 'MarkerSize', 10)
-hold on
-grid on
-plot(ax,exp(ax),'b-', 'linewidth', 2)
-legend('Computed using BVP1D', 'Exact')
-hold off
+if plot1
+    ax = 0:0.0001:2;
+    plot(x,u,'r--X', 'linewidth', 3, 'MarkerSize', 10)
+    hold on
+    grid on
+    plot(ax,exp(ax),'b-', 'linewidth', 2)
+    legend('Computed using BVP1D', 'Exact')
+    hold off
+end

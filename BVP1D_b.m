@@ -1,4 +1,4 @@
-function [u, x] = BVP1D_b(L,c,d,M)
+function [u, x] = BVP1D_b(L,c,d,M,plot1)
 % Purpose: Solve second-order boundary value problem using FEM.
 % Author(s): Edin Sadikovic, Mikkel Gronning, Ida Riis Jensen 
 
@@ -21,8 +21,7 @@ end
 A = spalloc(M, M, M*3); b = zeros(M,1);
 k = zeros(2,2,M); 
 h = diff(x);
-disp(x);
-disp(h);
+
 
 % Constructing the upper triangle of A
 for i = 1:M-1
@@ -33,13 +32,13 @@ for i = 1:M-1
     
     A(i,i) = A(i,i) + k(1,1,i);
     A(i,i+1) = k(1,2,i); 
-    A(i+1,i+1) = k(2,2,i);  
+    A(i+1,i+1) = k(2,2,i); 
 end 
 %% IMPOSE BOUNDARY CONDITIONS
 % (Algorithm 2)
 
 b(1) = c;
-b(2) = - A(1,2)*c;
+b(2) = b(2) - A(1,2)*c;
 A(1,1) = 1;
 A(1,2) = 0;
 b(M) = d;
@@ -57,10 +56,12 @@ end
 
 %% OUTPUT
 % Visualize solution and output solution
-ax = 0:0.0001:2;
-plot(x,u,'r--X', 'linewidth', 3, 'MarkerSize', 10)
-hold on
-grid on
-plot(ax,exp(ax),'b-', 'linewidth', 2)
-legend('Computed', 'Exact')
-hold off
+if plot1
+    ax = 0:0.0001:2;
+    plot(x,u,'r--X', 'linewidth', 3, 'MarkerSize', 10)
+    hold on
+    grid on
+    plot(ax,exp(ax),'b-', 'linewidth', 2)
+    legend('Computed', 'Exact')
+    hold off
+end 

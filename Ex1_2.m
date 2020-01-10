@@ -6,7 +6,8 @@ close all; clc;
 L = 2; c = 1; d = exp(2);
 x = [0.0, 0.2, 0.4, 0.6, 0.7, 0.9, 1.4, 1.5, 1.8, 1.9, 2.0];  
 
-[u] = BVP1D(L, c, d, x);
+[u] = BVP1D(L, c, d, x, 1);
+
 
 
 %% b)
@@ -25,3 +26,31 @@ M = 3;
 % deviations we conclude that the functions are valid. 
 
 %% d) 
+% Verification by looking at error bounds
+
+h = zeros(1, 10);
+h(1) = 1;
+
+err =  zeros(1,length(h));
+for i = 2:length(h)
+    h(i) = h(i-1)/2;
+end
+
+for i = 1:10
+    x = 0:h(i):2;
+    
+    u_d = BVP1D(L,c,d,x,0);
+    
+    % Using equation (1.33)
+    err(i) = max(abs(exp(x)-u_d'));
+end
+loglog(h,err,'b-x');
+hold on
+plot(h, h.^2, 'r')
+legend('Computed','O(h^2)','Location','northwest');
+hold off
+
+for i = 1:9
+    disp(err(i)/err(i+1)); 
+end
+
