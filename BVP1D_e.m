@@ -78,6 +78,8 @@ if plot1
     grid on
     plot(x2, exact(x2), 'b-', 'linewidth', 2)
     xlim([0 1.05])
-    legend('Computed','Exact','Location','northwest')
+    xlabel('x');
+    ylabel('u(x)');
+    legend('Computed with BVP1D_e','Exact','Location','northwest','FontSize',12)
     hold off
 end

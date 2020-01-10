@@ -1,5 +1,3 @@
-
-
 function [err] = compute_error_decrease(fun, VX, EToV)
     num_intervals = size(EToV,1);
 

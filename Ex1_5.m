@@ -7,7 +7,6 @@ close all; clc;
 
 xtmp = 0.01:0.0001:1;
 x = xtmp(2: end-1);
-%x = [0.0, 0.2, 0.4, 0.6, 0.7, 0.9, 1.4, 1.5, 1.8, 1.9, 2.0]; 
 
 epsilon = [1, 0.01, 0.0001];
 u = zeros(length(epsilon), length(x));
@@ -20,24 +19,37 @@ figure(1);
 plot(x, u(1,:),'r-','linewidth', 3)
 legend('Epsilon = 1','Location','northwest','FontSize',12);
 xlim([0 1.05]);
+xlabel('x');
+ylabel('u(x)');
 figure(2);
 plot(x, u(2,:),'r-', 'linewidth', 3)
 legend('Epsilon = 0.01','Location','northwest','FontSize',12);
 xlim([0 1.05]);
+xlabel('x');
+ylabel('u(x)');
 figure(3);
 plot(x, u(3,:),'r-','linewidth', 3)
 xlim([0 1.05]);
+xlabel('x');
+ylabel('u(x)');
 legend('Epsilon = 0.0001','Location','northwest','FontSize',12);
 
 %% e) 
-% A function that solve the boundary value problem (1.35) is made.
+% A function that solves the boundary value problem (1.35) 
+% is made.
 L = 1; c = 0; d = 0; psi = 1;
-% x = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
 
 x = linspace(0,1,20);
 u_e = BVP1D_e(L, c, d, x, epsilon(1), psi, 1);
 u_e2 = BVP1D_e(L, c, d, x, epsilon(2), psi, 1);
 u_e3 = BVP1D_e(L, c, d, x, epsilon(3), psi, 1);
+% The method is good when we are having diffusion equations,
+% but when epsilon -> 0 the equation doesn't contain diffusion
+% anymore. Hence, the behaviour of the computed solution looks
+% as seen in Figure 3.
+
+% We have tried to solve the problem by multiplying the exact
+% solution with a factor. The errors decrease but not enough.
 
 %% e)
 % Investigating the convergence
@@ -68,9 +80,13 @@ figure(1);
 loglog(h,err,'b-x');
 hold on
 plot(h, h.^2, 'r')
-legend('Exact solution', 'O(h^2)','Location','northwest');
+xlabel('h');
+ylabel('error');
+legend('Exact solution', 'O(h^2)','Location','northwest','FontSize',12);
 hold off
 
+% Verifying the convergence
 for i = 1:9
     disp(err(i)/err(i+1)); 
 end
+% As expected, the program converges towards 4. 

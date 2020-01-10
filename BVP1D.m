@@ -57,6 +57,8 @@ if plot1
     hold on
     grid on
     plot(ax,exp(ax),'b-', 'linewidth', 2)
-    legend('Computed using BVP1D', 'Exact')
+    xlabel('x');
+    ylabel('u(x)');
+    legend('Computed using BVP1D', 'Exact', 'Location', 'northwest','FontSize', 12)
     hold off
 end

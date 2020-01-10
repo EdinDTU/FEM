@@ -1,6 +1,3 @@
-
-
-
 function A = my_intergral(fun, x1, xc, x2)
 
 
