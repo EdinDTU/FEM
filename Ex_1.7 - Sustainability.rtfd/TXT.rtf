@@ -55,9 +55,8 @@ The CO2 emission per kWh is 0.3 kg. I.e.\
 
 \f3\fs20 \cf2 while\cf0  true
 \fs24 \
-\pard\pardeftab720\partightenfactor0
 
-\fs20 \cf0     \cf3 % Create a finner mesh
+\fs20     \cf3 % Create a finner mesh
 \fs24 \cf0 \
 
 \fs20     [EToVf, xf]  = refine_marked(EToVc, xc, EToVc(:,1));
@@ -104,13 +103,11 @@ The CO2 emission per kWh is 0.3 kg. I.e.\
 
 \fs20     \cf2 end
 \fs24 \cf0 \
-\pard\pardeftab720\partightenfactor0
 
 \fs20 \cf2  
 \fs24 \cf0 \
-\pard\pardeftab720\partightenfactor0
 
-\fs20 \cf0     \cf3 % update EToVc, xc
+\fs20     \cf3 % update EToVc, xc
 \fs24 \cf0 \
 
 \fs20     [EToVc, xc]  = refine_marked(EToVc, xc, EToVc(:,1));
@@ -118,7 +115,6 @@ The CO2 emission per kWh is 0.3 kg. I.e.\
 
 \fs20     count = count +1;
 \fs24 \
-\pard\pardeftab720\partightenfactor0
 
 \fs20 \cf2 end
 \fs24 \cf0 \
@@ -142,4 +138,4 @@ The following reference have we used to determine how many kg of CO2 that is use
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 \cf0 \
-10) Initial mesh configuration with x = [0 0.5 1.0], M = 3 is found in the last section of the file \'93DriverAMR1-7.m\'94.  }
+10) Initial mesh configuration with x = [0 0.5 1.0], M = 3 is found in the second section of the file \'93DriverAMR1-7.m\'94.  }
