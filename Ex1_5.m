@@ -34,7 +34,7 @@ legend('Epsilon = 0.0001','Location','northwest','FontSize',12);
 L = 1; c = 0; d = 0; psi = 1;
 % x = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
 
-x = linspace(0,1,60);
+x = linspace(0,1,20);
 u_e = BVP1D_e(L, c, d, x, epsilon(1), psi, 1);
 u_e2 = BVP1D_e(L, c, d, x, epsilon(2), psi, 1);
 u_e3 = BVP1D_e(L, c, d, x, epsilon(3), psi, 1);
@@ -50,22 +50,27 @@ for i = 2:length(h)
     h(i) = h(i-1)/2; 
 end
 
+exact = @(x1, epsilon) 1/psi* (exp(-psi/epsilon) ...
+    + (1 - exp(-psi/epsilon))*x1 ...
+    - exp(x1*psi/epsilon ... 
+    - psi/epsilon)) / (1 - exp(-psi/epsilon));
+
 for i = 1:10
     x = 0:h(i):1;
 
     u_e = BVP1D_e(L, c, d, x, epsilon(1), psi,0);
     
     % Using equation (1.33)
-    err(i) = max(abs(exp(x)-u_e(x)'));
+    err(i) = max(abs(exact(x, epsilon(1)) - u_e'));
 
 end
 figure(1);
 loglog(h,err,'b-x');
 hold on
 plot(h, h.^2, 'r')
-legend('Computed', 'O(h^2)');
+legend('Exact solution', 'O(h^2)','Location','northwest');
 hold off
 
-%for i = 1:9
-%    disp(err(i)/err(i+1)); 
-%end
+for i = 1:9
+    disp(err(i)/err(i+1)); 
+end

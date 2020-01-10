@@ -1,0 +1,6 @@
+u = @(x) exp(-800*(x - 0.4).^2) + 0.25*exp(-40*(x - 0.8).^2);
+
+x1 = linspace(0,1,10000);
+plot(x1, u(x1))
+
+% we expect many node near the exstrme curvatures i.e. x = 0.4
