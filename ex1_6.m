@@ -37,7 +37,6 @@ while true
     c = c +1;
 end
 
-
 %% d)
 figure(1);
 plot(VX, func(VX), 'r','LineWidth',2)
@@ -59,5 +58,3 @@ xlim([0 length(err)+2])
 xlabel('element i');
 ylabel('err_i');
 legend('Errors','Tolerance','FontSize',12)
-
-% 

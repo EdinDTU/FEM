@@ -1,15 +1,16 @@
-%% A
+%% Exercise 1.7
 
+%% a)
 u = @(x) exp(-800*(x - 0.4).^2) + 0.25*exp(-40*(x - 0.8).^2);
 
 x1 = linspace(0,1,10000);
 plot(x1, u(x1))
 
-% we expect many node near the exstrme curvatures i.e. around
+% we expect many nodes near the extreme curvatures i.e. around
 % x = 0.4, 0.5, 0.8
 
 
-%%  initial mesh configuration
+%% Initial mesh configuration
 clear, clc
 u = @(x) exp(-800*(x - 0.4).^2) + 0.25*exp(-40*(x - 0.8).^2);
 
@@ -18,7 +19,6 @@ func = @(x) (1003.7500 + 1600.00*x.^2 - 2560.000*x)*exp(-1.6*(5.*x - 4.).^2) ...
 
 c = u(0);
 d = u(1);
-
 
 x = linspace(0,1,3);
 sol = BVP1_7D(1, c, d, x, func);
@@ -44,6 +44,8 @@ EToVc(:,2) = 2:size(EToVc,1)+1;
 
 tol = 1e-4;
 count = 1;
+
+tic;
 while true
     % Create a finner mesh
     [EToVf, xf]  = refine_marked(EToVc, xc, EToVc(:,1));
@@ -66,6 +68,7 @@ while true
     [EToVc, xc]  = refine_marked(EToVc, xc, EToVc(:,1));
     count = count +1;
 end
+toc;
 
 % DOF = 2049, Iterations = 11, tol = 1e-4, Elements = 2048
 
