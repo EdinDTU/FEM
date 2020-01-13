@@ -1,4 +1,4 @@
-function [u, x] = BVP1D_b(L,c,d,M)
+function [u] = BVP1_7D(L, c, d, x, func)
 % Purpose: Solve second-order boundary value problem using FEM.
 % Author(s): Edin Sadikovic, Mikkel Gronning, Ida Riis Jensen 
 
@@ -6,42 +6,48 @@ function [u, x] = BVP1D_b(L,c,d,M)
 %     L : Domain length
 %     c : Left boundary condition
 %     d : Right boundary condition
-%     x : 1D mesh vector x(1:{M})
 
 %% GLOBAL ASSEMBLY
 % Assemble A (the upper triangle only) and b. (Algorithm 1)
-% If M is used in the call, compute x
-if M
-    x = c:1/M:L;
-end
 
 % Allocating SPARSE storage for A and FULL for b
-A = spalloc(M, M, M*3); b = zeros(M,1);
-k = zeros(2,2,M); 
+M = length(x);
+
+A = spalloc(M, M, M*3);
+b = zeros(M,1);
 h = diff(x);
 
 % Constructing the upper triangle of A
 for i = 1:M-1
     % Using equation (1.26)
-    k(1,1,i) = 1/h(i) + h(i)/3;
-    k(1,2,i) = -1/h(i) + h(i)/6;
-    k(2,2,i) = 1/h(i) + h(i)/3;
+    k11 = 1/h(i) + h(i)/3;
+    k12 = -1/h(i) + h(i)/6;
     
-    A(i,i) = A(i,i) + k(1,1,i);
-    A(i,i+1) = k(1,2,i); 
-    A(i+1,i+1) = k(2,2,i);  
+    A(i, i) = A(i,i) + k11;
+    A(i, i+1) = k12; 
+    A(i+1, i+1) = k11; 
+    
 end 
+
+for i = 2:M-1
+   b(i) = -(....
+       func(x(i-1)) * h(i-1)/6 ...
+       + func(x(i)) * ( h(i-1)/3 + h(i)/3 ) ...
+       + func(x(i+1)) * h(i)/6 ...
+   );
+end
+
 %% IMPOSE BOUNDARY CONDITIONS
 % (Algorithm 2)
 
-b(1) = c;
-b(2) = - A(1,2)*c;
-A(1,1) = 1;
-A(1,2) = 0;
-b(M) = d;
-b(M-1) = b(M-1) - A(M-1,M)*d; A(M,M) = 1;
-A(M-1,M) = 0;
-
+b(1)=c;
+b(2)=b(2)-A(1,2)*c;
+A(1,1)=1;
+A(1,2)=0;
+b(M)=d;
+b(M-1)= b(M-1) - A(M-1,M)*d;
+A(M,M)=1;
+A(M-1,M)=0;
 %% SOLVE SYSTEM
 % Solve using the Cholesky factorization of A to solve A*u=b
 [U,flag] = chol(A);
@@ -50,13 +56,3 @@ if flag == 0
 else
     disp('A is not positive definite'), return
 end
-
-%% OUTPUT
-% Visualize solution and output solution
-ax = 0:0.0001:2;
-plot(x,u,'r--X', 'linewidth', 3, 'MarkerSize', 10)
-hold on
-grid on
-plot(ax,exp(ax),'b-', 'linewidth', 2)
-legend('Computed', 'Exact')
-hold off

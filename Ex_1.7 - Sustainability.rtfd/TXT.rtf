@@ -1,0 +1,141 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Oblique;\f2\fswiss\fcharset0 Helvetica-Bold;
+\f3\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;\red34\green139\blue34;\red160\green32\blue240;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c0\c0\c100000;\csgenericrgb\c13333\c54510\c13333;\csgenericrgb\c62745\c12549\c94118;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww17200\viewh10680\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Exercise 1.7 - Sustainability\
+\
+
+\f1\i Authors: Edin Sadikovic (s151980), Mikkel Gr\'f8nning (s144968), Ida Riis Jensen (s161777)
+\f0\i0 \
+\
+\
+1) The CPU time, i.e. the performance is determined using the function tic toc in MatLab:\
+
+\f2\b Time = 0.247513 sec\
+\
+
+\f0\b0 2) Iteration counts: 
+\f2\b 11\
+\
+\
+
+\f0\b0 3) Final DOF: 
+\f2\b 2049
+\f0\b0 \
+\
+\
+4) The hardware used is chosen on Mikkel\'92s computer: \
+
+\f2\b 2 GHz Intel Core i7
+\f0\b0 \
+\
+\
+5) The CO2 consumption estimation have been done by calculating the CPU time in hours. We know that the CPU on this computer uses 90 Watt = 0.0900 kW. By multiplying the power consumption with the CPU time we get how many kWh that are used:\
+\
+
+\f2\b Consumption = Power consumption [kw] * CPU time [hours] =  0.0900 kW * (0.247513*3600) h =  80.1942 kWh
+\f0\b0 \
+\
+The CO2 emission per kWh is 0.3 kg. I.e.\
+\
+
+\f2\b CO2 emission = 0.3 kg CO2 / 80.1942 kWh = 0.0037 CO2/kWh
+\f0\b0 \
+\
+6) Error tolerance used is 
+\f2\b 1e-4 
+\f0\b0 and the code used for error measuring is given below:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs20 \cf2 while\cf0  true
+\fs24 \
+
+\fs20     \cf3 % Create a finner mesh
+\fs24 \cf0 \
+
+\fs20     [EToVf, xf]  = refine_marked(EToVc, xc, EToVc(:,1));
+\fs24 \
+
+\fs20     
+\fs24 \
+
+\fs20     uhc = BVP1_7D(1, c, d, xc, func);
+\fs24 \
+
+\fs20     uhf = BVP1_7D(1, c, d, xf, func);
+\fs24 \
+
+\fs20     
+\fs24 \
+
+\fs20     err = compute_error_decrease2(xc, xf, uhc, uhf, EToVc, EToVf);
+\fs24 \
+
+\fs20     
+\fs24 \
+
+\fs20     idxMarked = EToVc(:,1);
+\fs24 \
+
+\fs20     idxMarked = idxMarked(err > tol);
+\fs24 \
+
+\fs20  
+\fs24 \
+
+\fs20     \cf3 % Check if convegence is reaced
+\fs24 \cf0 \
+
+\fs20     \cf2 if\cf0  isempty(idxMarked)
+\fs24 \
+
+\fs20         disp(\cf4 'convergence reached'\cf0 )
+\fs24 \
+
+\fs20         \cf2 break
+\fs24 \cf0 \
+
+\fs20     \cf2 end
+\fs24 \cf0 \
+
+\fs20 \cf2  
+\fs24 \cf0 \
+
+\fs20     \cf3 % update EToVc, xc
+\fs24 \cf0 \
+
+\fs20     [EToVc, xc]  = refine_marked(EToVc, xc, EToVc(:,1));
+\fs24 \
+
+\fs20     count = count +1;
+\fs24 \
+
+\fs20 \cf2 end
+\fs24 \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0 \cf0 \
+\
+\
+7) Our adaptive mesh refinement strategy has been to \
+The idea have basically been to calculate the difference in the estimated error by splitting the element in two. If the the estimated error was smaller than 1/1000 (a variable measure) the the element was splitted into two uniform elements. The algorithm reached convergence once it was not benifiical to split the element into two anymore according the error.\
+\
+\
+\
+8) \
+We have used the following reference to find the power consumption of the computer in watt:\
+https://www.tomshardware.com/reviews/geforce-radeon-power,2122-7.html\
+\
+The following reference have we used to determine how many kg of CO2 that is used per kwh:\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf0 https://www.volker-quaschning.de/datserv/CO2-spez/index_e.php?fbclid=IwAR12QdU82LNeD5JT0kh6-9fa-G0dGcgEanDSsBEAR-QuzmZp6Hjxz_d-E00 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+10) Initial mesh configuration with x = [0 0.5 1.0], M = 3 is found in the second section of the file \'93DriverAMR1-7.m\'94.  }
